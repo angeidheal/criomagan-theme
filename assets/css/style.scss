@@ -1,0 +1,59 @@
+@import "{{ site.theme }}";
+
+:root {
+  --primary: #000;
+  --bg: #fff;
+  --text: #333;
+  --max-width: 800px;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, system-ui, sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+header {
+  background: var(--primary);
+  padding: 1rem;
+  
+  nav {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    gap: 1rem;
+    
+    a {
+      color: var(--bg);
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
+
+main {
+  max-width: var(--max-width);
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.post {
+  margin-bottom: 2rem;
+  
+  h2 {
+    margin: 0;
+    a { 
+      color: var(--primary);
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  header nav {
+    flex-direction: column;
+    align-items: center;
+  }
+} 

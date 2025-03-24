@@ -1,0 +1,73 @@
+# Site settings
+title: Criomagan Theme # Your site title
+lang: en # Set your site language
+description: >- # Your site description
+  'A responsive 3-column blog theme for Jekyll with localization support.'
+
+# URL settings
+url: 'https://yoursite.scot/' # Change to your site's URL
+baseurl: '' # Change to your site base URL (leave blank if not needed)
+permalink: /:year-:month-:day-:title/ # URL structure for blog posts
+category_dir: 'category' # Translate to your site language
+category_paginate_path: 'page' # Translate to your site language
+
+# Author settings
+author:
+  name: 'Crìstean MacMhìcheil' # Your name
+  site: 'https://github.com/angeidheal' # Your personal site URL
+  email: 'fios@angeidheal.scot' # Your email
+
+# Social media
+social:
+  rss: true  
+  github: YOURUSERNAME # Your GitHub username
+  mastodon: 
+    instance: mastodon.social # Your Mastodon instance
+    username: YOURUSERNAME # Your Mastodon username
+  pixelfed:
+    instance: pixelfed.social # Your Pixelfed instance
+    username: YOURUSERNAME # Your Pixelfed username
+  bluesky:
+    handle: YOURUSERNAME # Your Bluesky username
+  facebook: YOURUSERNAME # Your Facebook username
+  instagram: YOURUSERNAME # Your Instagram username
+  linkedin: YOURUSERNAME # Your LinkedIn username
+  threads: YOURUSERNAME # Your Threads username
+  twitter: YOURUSERNAME # Your Twitter username
+  youtube: YOURUSERNAME # Your YouTube username
+
+# Pagination settings
+paginate: 12 # Number of posts per page
+
+# PWA settings
+pwa:
+  enabled: true
+  sw_src_filepath: service-worker.js
+  sw_dest_filename: service-worker.js
+  precache_recent_posts_num: 12
+  precache_glob_directory: /
+  precache_glob_patterns:
+    - "assets/**/*"
+    - "index.html"
+  precache_glob_ignores:
+    - "{404.html,search.html}"
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-paginate
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - README.md
+  - package.json
+  - package-lock.json
+  - tailwind.config.js
+

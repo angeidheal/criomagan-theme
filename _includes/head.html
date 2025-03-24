@@ -1,0 +1,62 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="{{ '/manifest.json' | relative_url }}">
+<link rel="apple-touch-icon" href="{{ '/assets/icons/icon-192x192.png' | relative_url }}">
+<title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+
+<!-- Theme initialization (before styles load) -->
+<script>
+  // Force dark mode by default
+  if (!localStorage.getItem('color-theme')) {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('color-theme', 'dark');
+  } else if (localStorage.getItem('color-theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+</script>
+
+<!-- Styles -->
+<link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+
+<!-- SEO -->
+{% seo %}
+
+<!-- Scripts -->
+<script src="https://unpkg.com/lunr/lunr.js"></script>
+<script src="{{ '/assets/js/search.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+
+<!-- Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('{{ "/assets/js/service-worker.js" | relative_url }}')
+        .then(registration => console.log('ServiceWorker registered'))
+        .catch(err => console.log('ServiceWorker registration failed:', err));
+    });
+  }
+</script>
+
+<script>
+  // Initialize translations for JavaScript
+  window.siteTranslations = {
+    no_results: "{{ site.data.locales[site.lang].global.no_results }}",
+    search_placeholder: "{{ site.data.locales[site.lang].global.search_placeholder }}",
+    theme: {
+      light: "{{ site.data.locales[site.lang].global.theme.light }}",
+      dark: "{{ site.data.locales[site.lang].global.theme.dark }}"
+    }
+  };
+</script>
+
+<!-- Theme initialization -->
+<script>
+  // Force dark mode by default
+  if (!localStorage.getItem('color-theme')) {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('color-theme', 'dark');
+  } else if (localStorage.getItem('color-theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+</script> 

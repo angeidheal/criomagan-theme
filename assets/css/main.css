@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --transition-time: 0.3s;
+  }
+
+  html.transition,
+  html.transition *,
+  html.transition *:before,
+  html.transition *:after {
+    transition: all var(--transition-time) !important;
+    transition-delay: 0 !important;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+  }
+}
+
+@layer components {
+  .prose {
+    @apply max-w-none;
+  }
+}
+
+/* Search Results Styling */
+#search-results {
+  @apply space-y-4;
+}
+
+#search-results a {
+  @apply block p-3 rounded-lg transition-colors duration-200
+         bg-gray-50 hover:bg-gray-100
+         dark:bg-gray-700 dark:hover:bg-gray-600;
+}
+
+#search-results h3 {
+  @apply text-lg font-semibold mb-1
+         text-gray-900 dark:text-white;
+}
+
+#search-results p {
+  @apply text-sm text-gray-600 dark:text-gray-300;
+}
+
+#search-results mark {
+  @apply bg-yellow-200 dark:bg-yellow-700 px-1 rounded;
+} 

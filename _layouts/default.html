@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang }}" class="dark">
+<head>
+  {% include head.html %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <title>{{ page.title }}</title>
+  <style>
+    /* Add global transition for dark mode switching */
+    *, *::before, *::after {
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <header class="bg-white dark:bg-gray-800 shadow-sm">
+    <nav class="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center">
+        <a href="{{ '/' | relative_url }}" class="text-xl font-bold text-gray-900 dark:text-white">{{ site.title }}</a>
+        <div class="hidden lg:flex items-center ml-8 space-x-4">
+          {% for item in site.data.menu.main %}
+            <a href="{{ item.url | relative_url }}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">{{ item.title }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button id="sidebar-toggle" class="lg:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+          <i class="fa-solid fa-bars w-6 h-6"></i>
+        </button>
+        <button id="theme-toggle" type="button" class="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          </svg>
+          <svg id="theme-toggle-light-icon" class="block w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-grow">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex gap-8">
+        <div class="flex-grow prose prose-lg dark:prose-invert">
+          {{ content }}
+        </div>
+        
+        <!-- Mobile Sidebar -->
+        <div id="mobile-sidebar" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden lg:hidden">
+          <div class="fixed inset-y-0 right-0 w-80 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-all duration-300" id="mobile-sidebar-content">
+            <div class="p-4">
+              <button id="close-sidebar" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <i class="fa-solid fa-times w-6 h-6"></i>
+              </button>
+              <div class="mt-8">
+                <!-- Navigation -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg mb-6">
+                  <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{{ site.data.locales[site.lang].global.menu }}</h3>
+                  <nav class="space-y-2">
+                    {% for item in site.data.menu.main %}
+                      <a href="{{ item.url | relative_url }}" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">{{ item.title }}</a>
+                    {% endfor %}
+                  </nav>
+                </div>
+
+                <!-- Search -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg mb-6">
+                  <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{{ site.data.locales[site.lang].global.search }}</h3>
+                  <form id="mobile-search-form" class="relative">
+                    <input type="search" 
+                           id="mobile-search-input"
+                           class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="{{ site.data.locales[site.lang].global.search_placeholder }}">
+                  </form>
+                  <div id="mobile-search-results" class="mt-4"></div>
+                </div>
+
+                <!-- Categories -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg mb-6">
+                  <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{{ site.data.locales[site.lang].global.categories }}</h3>
+                  <ul class="space-y-2">
+                    {% assign categories = site.categories | sort %}
+                    {% for category in categories %}
+                      <li>
+                        <a href="{{ '/' | append: site.category_dir | default: 'category' | append: '/' | append: category[0] | transliterate | relative_url }}" 
+                           class="flex items-center justify-between text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                          <span>{{ category[0] }}</span>
+                          <span class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm px-2 py-1 rounded-full">{{ category[1].size }}</span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+
+                <!-- Follow -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg">
+                  <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{{ site.data.locales[site.lang].global.follow }}</h3>
+                  <ul class="space-y-2">
+                    {% if site.social.rss %}
+                    <li>
+                      <a href="/feed.xml" target="_blank" rel="noopener noreferrer" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-solid fa-rss w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.rss }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if site.social.github %}
+                    <li>
+                      <a href="https://github.com/{{ site.social.github }}" target="_blank" rel="noopener noreferrer" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-brands fa-github w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.github }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if site.social.mastodon.instance and site.social.mastodon.username %}
+                    <li>
+                      <a href="https://{{ site.social.mastodon.instance }}/@{{ site.social.mastodon.username }}" target="_blank" rel="noopener noreferrer me" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-brands fa-mastodon w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.mastodon }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if site.social.pixelfed.instance and site.social.pixelfed.username %}
+                    <li>
+                      <a href="https://{{ site.social.pixelfed.instance }}/@{{ site.social.pixelfed.username }}" target="_blank" rel="noopener noreferrer" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-solid fa-camera w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.pixelfed }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if site.social.bluesky %}
+                    <li>
+                      <a href="https://bsky.app/profile/{{ site.social.bluesky.handle }}" target="_blank" rel="noopener noreferrer" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                         <i class="fa-brands fa-bluesky w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.bluesky }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if site.social.facebook %}
+                    <li>
+                      <a href="https://facebook.com/{{ site.social.facebook }}" target="_blank" rel="noopener noreferrer" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-brands fa-facebook w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.facebook }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if site.social.instagram %}
+                    <li>
+                      <a href="https://instagram.com/{{ site.social.instagram }}" target="_blank" rel="noopener noreferrer" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-brands fa-instagram w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.instagram }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if site.social.linkedin %}
+                    <li>
+                      <a href="https://linkedin.com/in/{{ site.social.linkedin }}" target="_blank" rel="noopener noreferrer" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-brands fa-linkedin w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.linkedin }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if site.social.threads %}
+                    <li>
+                      <a href="https://threads.net/@{{ site.social.threads }}" target="_blank" rel="noopener noreferrer" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-brands fa-threads w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.threads }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if site.social.twitter %}
+                    <li>
+                      <a href="https://twitter.com/{{ site.social.twitter }}" target="_blank" rel="noopener noreferrer" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-brands fa-twitter w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.twitter }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if site.social.youtube %}
+                    <li>
+                      <a href="https://youtube.com/@{{ site.social.youtube }}" target="_blank" rel="noopener noreferrer" 
+                         class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fa-brands fa-youtube w-5 h-5 mr-3"></i>
+                        <span class="flex-grow">{{ site.data.locales[site.lang].global.social.youtube }}</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Sidebar -->
+        <div class="w-80 flex-shrink-0 hidden lg:block">
+          <div class="sticky top-8">
+            <!-- Search -->
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm mb-6">
+              <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{{ site.data.locales[site.lang].global.search }}</h3>
+              <form id="search-form" class="relative">
+                <input type="search" 
+                       id="search-input"
+                       class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="{{ site.data.locales[site.lang].global.search_placeholder }}">
+              </form>
+              <div id="search-results" class="mt-4"></div>
+            </div>
+
+            <!-- Categories -->
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm mb-6">
+              <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{{ site.data.locales[site.lang].global.categories }}</h3>
+              <ul class="space-y-2">
+                {% assign categories = site.categories | sort %}
+                {% for category in categories %}
+                  <li>
+                    <a href="{{ '/' | append: site.category_dir | default: 'category' | append: '/' | append: category[0] | transliterate | relative_url }}" 
+                       class="flex items-center justify-between text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                      <span>{{ category[0] }}</span>
+                      <span class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm px-2 py-1 rounded-full">{{ category[1].size }}</span>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <!-- Follow -->
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+              <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{{ site.data.locales[site.lang].global.follow }}</h3>
+              <ul class="space-y-2">
+                {% if site.social.rss %}
+                <li>
+                  <a href="/feed.xml" target="_blank" rel="noopener noreferrer" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-solid fa-rss w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.rss }}</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if site.social.github %}
+                <li>
+                  <a href="https://github.com/{{ site.social.github }}" target="_blank" rel="noopener noreferrer" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-brands fa-github w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.github }}</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if site.social.mastodon.instance and site.social.mastodon.username %}
+                <li>
+                  <a href="https://{{ site.social.mastodon.instance }}/@{{ site.social.mastodon.username }}" target="_blank" rel="noopener noreferrer me" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-brands fa-mastodon w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.mastodon }}</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if site.social.pixelfed.instance and site.social.pixelfed.username %}
+                <li>
+                  <a href="https://{{ site.social.pixelfed.instance }}/@{{ site.social.pixelfed.username }}" target="_blank" rel="noopener noreferrer" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-solid fa-camera w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.pixelfed }}</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if site.social.bluesky %}
+                <li>
+                  <a href="https://bsky.app/profile/{{ site.social.bluesky.handle }}" target="_blank" rel="noopener noreferrer" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                     <i class="fa-brands fa-bluesky w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.bluesky }}</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if site.social.facebook %}
+                <li>
+                  <a href="https://facebook.com/{{ site.social.facebook }}" target="_blank" rel="noopener noreferrer" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-brands fa-facebook w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.facebook }}</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if site.social.instagram %}
+                <li>
+                  <a href="https://instagram.com/{{ site.social.instagram }}" target="_blank" rel="noopener noreferrer" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-brands fa-instagram w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.instagram }}</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if site.social.linkedin %}
+                <li>
+                  <a href="https://linkedin.com/in/{{ site.social.linkedin }}" target="_blank" rel="noopener noreferrer" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-brands fa-linkedin w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.linkedin }}</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if site.social.threads %}
+                <li>
+                  <a href="https://threads.net/@{{ site.social.threads }}" target="_blank" rel="noopener noreferrer" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-brands fa-threads w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.threads }}</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if site.social.twitter %}
+                <li>
+                  <a href="https://twitter.com/{{ site.social.twitter }}" target="_blank" rel="noopener noreferrer" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-brands fa-twitter w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.twitter }}</span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if site.social.youtube %}
+                <li>
+                  <a href="https://youtube.com/@{{ site.social.youtube }}" target="_blank" rel="noopener noreferrer" 
+                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    <i class="fa-brands fa-youtube w-5 h-5 mr-3"></i>
+                    <span class="flex-grow">{{ site.data.locales[site.lang].global.social.youtube }}</span>
+                  </a>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex flex-col items-center justify-center">
+      <p class="text-sm text-gray-500 dark:text-gray-400"><i class="fa-solid fa-code"></i> {{ site.data.locales[site.lang].global.made_by }} <i class="fa-solid fa-heart"></i> {{ site.data.locales[site.lang].global.made_by }} <a href="{{ site.author.site}}" class="hover:text-gray-700 dark:hover:text-gray-300"> {{ site.author.name}}</a></p>
+      <p class="text-sm text-gray-500 dark:text-gray-400">&copy; {{ site.time | date: '%Y' }} {{ site.title }}</p>
+    </div>
+  </footer>
+
+  <script>
+    // Theme toggle
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => console.log('ServiceWorker registered'))
+          .catch(err => console.log('ServiceWorker registration failed:', err));
+      });
+    }
+
+    // Search functionality
+    function setupSearch(formId, inputId, resultsId) {
+      const form = document.getElementById(formId);
+      const input = document.getElementById(inputId);
+      const results = document.getElementById(resultsId);
+
+      if (!form || !input || !results) return;
+
+      function performSearch() {
+        const query = input.value.toLowerCase();
+        if (!query) {
+          results.innerHTML = '';
+          return;
+        }
+
+        fetch('/search.json')
+          .then(response => response.json())
+          .then(data => {
+            const matches = data.filter(item => 
+              item.title.toLowerCase().includes(query) || 
+              item.content.toLowerCase().includes(query)
+            );
+            
+            results.innerHTML = matches.length ? matches.map(item => `
+              <a href="${item.url}" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                <div class="font-medium text-gray-900 dark:text-white">${item.title}</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">${item.content.substring(0, 100)}...</div>
+              </a>
+            `).join('') : '<p class="p-2 text-gray-600 dark:text-gray-400">No results found</p>';
+          });
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        performSearch();
+      });
+
+      // Live search as user types
+      input.addEventListener('input', () => {
+        performSearch();
+      });
+    }
+
+    // Setup search for both desktop and mobile
+    setupSearch('search-form', 'search-input', 'search-results');
+    setupSearch('mobile-search-form', 'mobile-search-input', 'mobile-search-results');
+
+    // Mobile sidebar
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const mobileSidebarContent = document.getElementById('mobile-sidebar-content');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const closeSidebar = document.getElementById('close-sidebar');
+
+    sidebarToggle.addEventListener('click', () => {
+      mobileSidebar.classList.remove('hidden');
+      setTimeout(() => {
+        mobileSidebarContent.classList.remove('translate-x-full');
+      }, 10);
+    });
+
+    closeSidebar.addEventListener('click', () => {
+      mobileSidebarContent.classList.add('translate-x-full');
+      setTimeout(() => {
+        mobileSidebar.classList.add('hidden');
+      }, 300);
+    });
+
+    mobileSidebar.addEventListener('click', (e) => {
+      if (e.target === mobileSidebar) {
+        mobileSidebarContent.classList.add('translate-x-full');
+        setTimeout(() => {
+          mobileSidebar.classList.add('hidden');
+        }, 300);
+      }
+    });
+  </script>
+</body>
+</html> 

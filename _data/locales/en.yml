@@ -1,0 +1,55 @@
+# Site wide translations
+global:
+  home: "Home"
+  about: "About"
+  search: "Search"
+  search_placeholder: "Search posts..."
+  no_results: "No results found"
+  back_to_home: "Back to Home"
+  category: "Category"
+  categories: "Categories"
+  follow: "Follow"
+  made_by: "by"
+  theme:
+    light: "Light mode"
+    dark: "Dark mode"
+  months:
+    january: "January"
+    february: "February"
+    march: "March"
+    april: "April"
+    may: "May"
+    june: "June"
+    july: "July"
+    august: "August"
+    september: "September"
+    october: "October"
+    november: "November"
+    december: "December"
+  social:
+    rss: "RSS Feed"
+    github: "GitHub"
+    mastodon: "Mastodon"
+    pixelfed: "Pixelfed"
+    bluesky: "Bluesky"
+    facebook: "Facebook"
+    instagram: "Instagram"
+    linkedin: "LinkedIn"
+    threads: "Threads"
+    twitter: "Twitter"
+    youtube: "YouTube"
+  
+# Post related translations
+post:
+  posted_on: "Posted on:"
+  read_more: "Read more"
+  categories: "Categories"
+  tags: "Tags"
+  category_prefix: "Category:"
+  separator: "•"
+  date_format: "%d %B %Y"
+
+# 404 page
+not_found:
+  title: "Page Not Found"
+  message: "The page you're looking for doesn't exist." 

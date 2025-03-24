@@ -1,0 +1,55 @@
+# Site wide translations
+global:
+  home: "Dachaigh"
+  about: "Mu dheidhinn"
+  search: "Lorg"
+  search_placeholder: "Lorg sna postaichean..."
+  no_results: "Cha deach post a lorg"
+  back_to_home: "Till dhachaigh"
+  category: "Roinn-seòrsa"
+  categories: "Roinnean-seòrsa"
+  follow: "Lean mi"
+  made_by: "le"
+  theme:
+    light: "Modh soilleir"
+    dark: "Modh dorcha"
+  months:
+    january: "Am Faoilleach"
+    february: "An Gearran"
+    march: "Am Màrt"
+    april: "An Giblean"
+    may: "An Cèitean"
+    june: "An t-Ògmhios"
+    july: "An t-Iuchar"
+    august: "An Lùnastal"
+    september: "An t-Sultain"
+    october: "An Dàmhair"
+    november: "An t-Samhain"
+    december: "An Dùbhlachd"
+  social:
+    rss: "Inbhir RSS"
+    github: "GitHub"
+    mastodon: "Mastodon"
+    pixelfed: "Pixelfed"
+    bluesky: "Bluesky"
+    facebook: "Facebook"
+    instagram: "Instagram"
+    linkedin: "LinkedIn"
+    threads: "Threads"
+    twitter: "Twitter"
+    youtube: "YouTube"
+  
+# Post related translations
+post:
+  posted_on: "Air fhoillseachadh:"
+  read_more: "Leugh barrachd"
+  categories: "Roinnean-seòrsa"
+  tags: "Tagaichean"
+  category_prefix: "Roinn-seòrsa:"
+  separator: "•"
+  date_format: "%d %B %Y"
+
+# 404 page
+not_found:
+  title: "Cha deach an duilleag a lorg"
+  message: "Cha deach an duilleag a lorg." 
